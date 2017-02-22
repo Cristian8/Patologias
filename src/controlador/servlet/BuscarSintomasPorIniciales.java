@@ -2,6 +2,7 @@ package controlador.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,7 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 
+import dao.SintomasDAO;
 import dto.SintomasDTO;
 import servicios.SintomasService;
 
@@ -35,15 +38,24 @@ public class BuscarSintomasPorIniciales extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		SintomasService ss = new SintomasService();
-		String valor = request.getParameter("valor");
 		
 		
 		long tinicial = System.currentTimeMillis();
-		List<String> sintoDto = ss.buscarSintomasPorInicial("v");
-		for (String string : sintoDto) {
-			System.out.println(string);
-		}
 		
+		
+		try {
+			String valorSintoma = request.getParameter("sintomaBuscado");
+			List<SintomasDTO> lista_sintomaDTO = ss.buscarSintomasPorInicial(valorSintoma);
+			
+			
+			for(SintomasDTO sintoma: lista_sintomaDTO)
+			{
+				valorSintoma = sintoma.getDescripcion();
+				System.out.println(valorSintoma);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		long tfinal =System.currentTimeMillis();
 		long ttotal = tfinal-tinicial;
 		//PrintWriter pw = response.getWriter().append( sintoDto.getDescripcion();
@@ -58,7 +70,12 @@ public class BuscarSintomasPorIniciales extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		/*String json = request.getReader().readLine();
+		Gson gson = new Gson();
+		SintomasDTO s = gson.fromJson(json, SintomasDTO.class);
+		
+		System.out.println("El usuario ha buscado sintoma: " + s.getDescripcion());*/
+		//doGet(request, response);
 	}
 
 }
