@@ -4,26 +4,37 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 <script>
-
-}
 var xmlHttp = new XMLHttpRequest();
-
-function rellenaCaja()
+function buscaSintoma()
 {
-	xmlHttp.onreadystatechange = procesarEventos;
-	xmlHttp.open('GET', 'CargaJSON', true); //indicamos como vamos a enviar los datos, en este caso con el metodo GET al archivo meses.php?num= el valor que le indiquemos en el textbox
-	xmlHttp.send(null);
-	
+	var valor_introducido = document.getElementById("intro").value;
+	if(valor_introducido != "")
+	{
+		xmlHttp.onreadystatechange = procesarEventos;
+		xmlHttp.open('GET', 'BuscarSintomasPorIniciales?intro='+valor_introducido, true); 
+		xmlHttp.send(null);
+	}
 }
-function cambiar(){
-	var valor = document.getElementById("intro").value;
-	
-	alert("El valor es = " + valor);
+function procesarEventos()
+{
+  if(xmlHttp.readyState==4) //ya hemos recibido respuesta del servidor
+  {
+      if(xmlHttp.status==200)// y el código de la cabecera http es bueno
+          {
+			alert("He recibido " + xmlHttp.responseText);
+			
+          }
+      else
+      {
+          alert("Ha ocurrido un error"+ xmlHttp.status +":"+ xmlHttp.statusText);
+      }
+  }
+}
 </script>
 </head>
 <body>
 <h1>Introduce sintoma</h1>
-<input type="text" id="intro" onkeyup="cambiar()"> 
+<input type="text" id="intro" onkeyup="buscaSintoma()"> 
 
 </body>
 </html>

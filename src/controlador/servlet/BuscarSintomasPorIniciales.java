@@ -1,8 +1,8 @@
 package controlador.servlet;
 
 import java.io.IOException;
-
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.lang.reflect.Type;
 import javax.servlet.ServletException;
@@ -43,24 +43,28 @@ public class BuscarSintomasPorIniciales extends HttpServlet {
 		long tinicial = System.currentTimeMillis();
 		
 		
-		try {
-			String valorSintoma = request.getParameter("sintomaBuscado");
-			List<SintomasDTO> lista_sintomaDTO = ss.buscarSintomasPorInicial(valorSintoma);
+		
+		List<SintomasDTO> lista_sintomas = new ArrayList<SintomasDTO>();
+		
+			lista_sintomas = ss.buscarSintomasPorInicial(request.getParameter("intro"));
+		
 			
 			
-			for(SintomasDTO sintoma: lista_sintomaDTO)
+			/*for(SintomasDTO sintoma: lista_sintomaDTO)
 			{
 				valorSintoma = sintoma.getDescripcion();
 				System.out.println(valorSintoma);
-			}
-			Gson gson = new Gson();
-			Type tipoListaSintomas = new TypeToken<List<SintomasDTO>>(){}.getType();
-			String s = gson.toJson(lista_sintomaDTO, tipoListaSintomas);
-			System.out.println(s);
+			}*/
+		Gson gson = new Gson();
+		Type tipoListaSintomas = new TypeToken<List<SintomasDTO>>(){}.getType();
+		String s = gson.toJson(lista_sintomas, tipoListaSintomas);
+//		System.out.println(s);
+		
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(s);
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 		
 		
 		
@@ -81,9 +85,10 @@ public class BuscarSintomasPorIniciales extends HttpServlet {
 		/*String json = request.getReader().readLine();
 		Gson gson = new Gson();
 		SintomasDTO s = gson.fromJson(json, SintomasDTO.class);
+		System.out.println("Id = " + s.getId()+ "Descripcion" + s.getDescripcion());*/
 		
-		System.out.println("El usuario ha buscado sintoma: " + s.getDescripcion());*/
-		//doGet(request, response);
+		//System.out.println("El usuario ha buscado sintoma: " + s.getDescripcion());
+		doGet(request, response);
 	}
 
 }
