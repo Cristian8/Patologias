@@ -1,10 +1,10 @@
 package controlador.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+
 import java.sql.SQLException;
 import java.util.List;
-
+import java.lang.reflect.Type;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import dao.SintomasDAO;
 import dto.SintomasDTO;
 import servicios.SintomasService;
 
@@ -53,9 +53,17 @@ public class BuscarSintomasPorIniciales extends HttpServlet {
 				valorSintoma = sintoma.getDescripcion();
 				System.out.println(valorSintoma);
 			}
+			Gson gson = new Gson();
+			Type tipoListaSintomas = new TypeToken<List<SintomasDTO>>(){}.getType();
+			String s = gson.toJson(lista_sintomaDTO, tipoListaSintomas);
+			System.out.println(s);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		
+		
 		long tfinal =System.currentTimeMillis();
 		long ttotal = tfinal-tinicial;
 		//PrintWriter pw = response.getWriter().append( sintoDto.getDescripcion();
